@@ -18,7 +18,7 @@ Image::Image(int _h, int _w) {
         arr[i] = arr[0] + i * w;
     }
     for (int i = 0; i < h*w; i++) {
-        arr[0][i] = rand() % 100 + 1;
+        arr[0][i] = rand() % 9 + 1;
     }
 
 }
@@ -70,30 +70,28 @@ unsigned char &Image::Get_Pixel(int _h, int _w) {
 }
 
 void Image::increase() {
-    int volume = 2;
-    int newH = h * volume; // = 2
-    int newW = w * volume;
+    int newH = h * 2; // = 2
+    int newW = w * 2;
 
     unsigned char** newArrH = new unsigned char* [newH];
     newArrH[0] = new unsigned char[newH * newW];
     for (int i = 1; i < newH; i++)
         newArrH[i] = newArrH[0] + i * newW;
 
-    for (int i = 0; i < newH; i+=volume) {
-        for (int j = 0; j < newW; j+=volume) {
-            newArrH[i][j] = arr[i/volume][j/volume];
-        }
+    newArrH[0][0] = arr[0][0];
+    for (int j = 2; j < newW-1; j+=2) {
+        newArrH[0][j] = arr[0][j/2];
+        newArrH[0][j-1] = (newArrH[0][j-2] + newArrH[0][j]) / 2;
     }
+    for (int i = 2; i < newH-1; i+=2) {
+        newArrH[i][0] = arr[i/2][0];
+        newArrH[i-1][0] = (newArrH[i-2][0] + newArrH[i][0]) / 2;
+        for (int j = 2; j < newW-1; j+=2) {
+            newArrH[i][j] = arr[i/2][j/2];
+            newArrH[i-1][j] = (newArrH[i-2][j] + newArrH[i][j]) / 2;
 
-    for (int i = 0; i < newH - 1; i+=volume) {
-        for (int j = 1; j < newW - 1; j+=volume) {
-            newArrH[i][j] = (newArrH[i][j-1] + newArrH[i][j+1]) / 2;
-        }
-    }
-
-    for (int i = 1; i < newH - 1; i+=volume) {
-        for (int j = 0; j < newW; j++) {
-            newArrH[i][j] = (newArrH[i-1][j] + newArrH[i+1][j]) / 2;
+            newArrH[i][j-1] = (newArrH[i][j-2] + newArrH[i][j]) / 2;
+            newArrH[i-1][j-1] = (newArrH[i-2][j-1] + newArrH[i][j-1]) / 2;
         }
     }
 
