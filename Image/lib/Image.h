@@ -6,6 +6,7 @@ class Image
 private:
     int h;
     int w;
+protected:
     unsigned char** arr;
 public:
     Image(int _h = 1, int _w = 1);
