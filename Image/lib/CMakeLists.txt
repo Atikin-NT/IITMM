@@ -1,1 +1,0 @@
-add_library(lib STATIC Image.cpp Image.h ImageTXT.cpp ImageTXT.h ImageBin.cpp ImageBin.h)
