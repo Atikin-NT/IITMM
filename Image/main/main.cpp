@@ -15,12 +15,12 @@ void fill(Image& img, T method){
 }
 
 int main() {
-    ImageBin imgBin;
+    ImageTXT imgBin;
     imgBin.getFromFile("const.txt");
     imgBin.print();
-    fill(imgBin, new FillWhite());
-//    imgBin.increase();
-    imgBin.print();
+//    fill(imgBin, new FillWhite());
+    imgBin.increase();
+//    imgBin.print();
     imgBin.writeToFile("image-output.bin");
 
     return 0;

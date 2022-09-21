@@ -1,6 +1,3 @@
-//
-// Created by atikin on 03.09.22.
-//
 #include <iostream>
 #include <cstring>
 #include "Image.h"
@@ -66,45 +63,9 @@ unsigned char &Image::Get_Pixel(int _h, int _w) {
 }
 
 void Image::increase() {
-    int newH = h * 2; // = 2
-    int newW = w * 2;
-
-    unsigned char** newArrH = new unsigned char* [newH];
-    newArrH[0] = new unsigned char[newH * newW];
-    for (int i = 1; i < newH; i++)
-        newArrH[i] = newArrH[0] + i * newW;
-
-    newArrH[0][0] = arr[0][0];
-    for (int j = 2; j < newW-1; j+=2) {
-        newArrH[0][j] = arr[0][j/2];
-        newArrH[0][j-1] = (newArrH[0][j-2] + newArrH[0][j]) / 2;
-    }
-    for (int i = 2; i < newH-1; i+=2) {
-        newArrH[i][0] = arr[i/2][0];
-        newArrH[i-1][0] = (newArrH[i-2][0] + newArrH[i][0]) / 2;
-        for (int j = 2; j < newW-1; j+=2) {
-            newArrH[i][j] = arr[i/2][j/2];
-            newArrH[i-1][j] = (newArrH[i-2][j] + newArrH[i][j]) / 2;
-
-            newArrH[i][j-1] = (newArrH[i][j-2] + newArrH[i][j]) / 2;
-            newArrH[i-1][j-1] = (newArrH[i-2][j-1] + newArrH[i][j-1]) / 2;
-        }
-    }
-
-    for (int i = 0; i < newW; i++) {
-        newArrH[newH-1][i] = newArrH[newH-2][i];
-    }
-
-    for (int i = 0; i < newH; i++) {
-        newArrH[i][newW-1] = newArrH[i][newW-2];
-    }
-
-    delete[] arr[0];
-    delete[] arr;
-
-    arr = newArrH;
-    h = newH;
-    w = newW;
+    h *= 2;
+    w *= 2;
+    arr = increaseFun(arr, h, w);
 }
 
 void Image::decrease(int volume) {
@@ -162,4 +123,48 @@ void Image::reload(int _h, int _w) {
     {
         arr[i] = arr[0] + i * w;
     }
+}
+
+unsigned char** Image::increaseFun(unsigned char** arrIncrease, int h, int w) {
+    unsigned char** newArrH = new unsigned char* [h];
+    newArrH[0] = new unsigned char[h * w];
+    for (int i = 1; i < h; i++)
+        newArrH[i] = newArrH[0] + i * w;
+
+    newArrH[0][0] = arrIncrease[0][0];
+    for (int j = 2; j < w-1; j+=2) {
+        newArrH[0][j] = arrIncrease[0][j/2];
+        newArrH[0][j-1] = (newArrH[0][j-2] + newArrH[0][j]) / 2;
+    }
+    for (int i = 2; i < h-1; i+=2) {
+        newArrH[i][0] = arrIncrease[i/2][0];
+        newArrH[i-1][0] = (newArrH[i-2][0] + newArrH[i][0]) / 2;
+        for (int j = 2; j < w-1; j+=2) {
+            newArrH[i][j] = arrIncrease[i/2][j/2];
+            newArrH[i-1][j] = (newArrH[i-2][j] + newArrH[i][j]) / 2;
+
+            newArrH[i][j-1] = (newArrH[i][j-2] + newArrH[i][j]) / 2;
+            newArrH[i-1][j-1] = (newArrH[i-2][j-1] + newArrH[i][j-1]) / 2;
+        }
+    }
+
+    for (int i = 0; i < w; i++) {
+        newArrH[h-1][i] = newArrH[h-2][i];
+    }
+
+    for (int i = 0; i < h; i++) {
+        newArrH[i][w-1] = newArrH[i][w-2];
+    }
+
+    delete[] arrIncrease[0];
+    delete[] arrIncrease;
+
+    return newArrH;
+}
+
+bool Image::compareArr(unsigned char **arr1, unsigned char **arr2, int len) {
+    for (int i = 0; i < len; i++) {
+        if(arr1[0][i] != arr2[0][i]) return false;
+    }
+    return true;
 }

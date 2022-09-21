@@ -23,6 +23,9 @@ public:
     int getW();
 
     void reload(int h, int w);
+
+    static unsigned char** increaseFun(unsigned char** arr, int h, int w);
+    static bool compareArr(unsigned char** arr1, unsigned char** arr2, int len);
 };
 
 
