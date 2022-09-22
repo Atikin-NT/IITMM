@@ -14,7 +14,7 @@ ImageTXT::~ImageTXT() {
 
 void ImageTXT::getFromFile(std::string filename) {
     ifile.open(filename, ios::in);
-    if(!ifile.is_open()) return;
+    if(!ifile.is_open()) throw("Open error");
 
     int w = 1, h = 1;
     ifile >> h;
@@ -36,7 +36,7 @@ void ImageTXT::getFromFile(std::string filename) {
 
 void ImageTXT::writeToFile(std::string filename) {
     ofile.open(filename, ios::out);
-    if(!ofile.is_open()) return;
+    if(!ofile.is_open()) throw("Open error");
     ofile << img->getW() << " " << img->getH() << endl;
 
     for (int i = 0; i < img->getH(); i++) {
@@ -58,4 +58,16 @@ void ImageTXT::increase() {
 }
 void ImageTXT::decrease(int volume) {
     img->decrease(volume);
+}
+
+unsigned char &ImageTXT::Get_Pixel(int _h, int _w) {
+    return img->Get_Pixel(_h, _w);
+}
+
+int ImageTXT::getH() {
+    return img->getH();
+}
+
+int ImageTXT::getW() {
+    return img->getW();
 }
